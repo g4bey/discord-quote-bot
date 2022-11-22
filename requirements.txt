@@ -19,7 +19,7 @@ hikari-lightbulb==2.2.1
 idna==3.3
 multidict==6.0.2
 nextcord==2.0.0a10
-Pillow==9.1.0
+Pillow==9.3.0
 pycares==4.1.2
 pycodestyle==2.8.0
 pycparser==2.21
