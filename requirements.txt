@@ -24,7 +24,7 @@ pycares==4.1.2
 pycodestyle==2.8.0
 pycparser==2.21
 PyYAML==6.0
-requests==2.27.1
+requests==2.31.0
 tinydb==4.7.0
 tinydb-smartcache==2.0.0
 toml==0.10.2
