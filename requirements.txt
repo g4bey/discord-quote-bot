@@ -29,6 +29,6 @@ tinydb==4.7.0
 tinydb-smartcache==2.0.0
 toml==0.10.2
 typing_extensions==4.2.0
-urllib3==1.26.9
+urllib3==1.26.18
 yarl==1.7.2
 uvloop>=0.16; sys_platform != "win32"
