@@ -17,7 +17,7 @@ from multiprocessing import freeze_support
 conf = get_config()
 
 logger = conf['logger']
-token = ('discord-token') or conf['token']
+token = conf['token']
 
 
 # SETTING UP LOGGING
@@ -26,15 +26,14 @@ init_logger(logger)
 
 # SETTING UP THE DISCORD BOT
 # -----------------------------------------------------
-default_enabled_guilds = (964818125503750174)
+# default_enabled_guilds = ()
 
 
 bot = lightbulb.BotApp(
     token=token,
-    prefix='>',
     intents=hikari.Intents.ALL,
     delete_unbound_commands=True,
-    default_enabled_guilds=default_enabled_guilds
+    default_enabled_guilds=(conf['owner_guild'])
 )
 
 bot.load_extensions_from("./extensions/", must_exist=True)
