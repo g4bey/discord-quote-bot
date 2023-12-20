@@ -9,6 +9,7 @@ In the past, I heavily relied on upserts, thinking they could be useful in case 
 This project was initiated a while ago, and at the time, I was eager to complete it. Looking back, it's amusing to see all the unconventional code I wrote.
 
 
-# how to start
+## how to start
 
-it's pretty easy! All you need is a token u set in config... and voila! You may as well set a owner guild in order to use the owner only commands.
+it's pretty easy! All you need is a token u set in `config.yaml`... and voila! 
+You may as well set a owner guild in order to use the owner only commands.
