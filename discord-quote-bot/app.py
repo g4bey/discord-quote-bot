@@ -6,7 +6,7 @@ from os import listdir, getenv, name as os_name
 import hikari
 import asyncio
 import lightbulb
-from utils import get_config
+from utils import get_config, registerOrReset_guild, remove_guild
 from utils import guilds_settings
 from tinydb import Query
 from multiprocessing import freeze_support
@@ -26,8 +26,6 @@ init_logger(logger)
 
 # SETTING UP THE DISCORD BOT
 # -----------------------------------------------------
-# default_enabled_guilds = ()
-
 
 bot = lightbulb.BotApp(
     token=token,
@@ -40,18 +38,11 @@ bot.load_extensions_from("./extensions/", must_exist=True)
 
 @bot.listen()
 async def on_guild_join(event: hikari.GuildJoinEvent) -> None:
-    guilds_settings.upsert(
-        {
-            'guild_id': event.guild_id,
-            'global': True,
-            'hall_of_fame': None
-        },
-        Query().guild_id == event.guild_id
-    )
+    registerOrReset_guild(hikari.GuildJoinEvent)
 
 @bot.listen()
 async def on_guild_leave(event: hikari.GuildLeaveEvent) -> None:
-    guilds_settings.remove(Query().guild_id == event.guild_id)
+    remove_guild(event.guild_id)
 
 @bot.listen()
 async def on_starting(event: hikari.StartingEvent) -> None:
@@ -60,10 +51,9 @@ async def on_starting(event: hikari.StartingEvent) -> None:
     bot.d.process_pool = concurrent.futures.ProcessPoolExecutor()
 
 
-
 if __name__ == "__main__":
     if os_name != "nt":
-        import uvloop  # type: ignore (uvloop does not exist on windows.)
+        import uvloop  #  ignore (uvloop does not exist on windows.)
         uvloop.install()
         
     bot.run(

@@ -42,12 +42,15 @@ def get_parameters_and_check_availibity(
     """
 
     guild = Query()
-    param = guilds_settings.search(guild.guild_id == ctx.guild_id)[0]
+    param = guilds_settings.search(guild.guild_id == ctx.guild_id)
 
-    if not param.get('global') and not param.get('hall_of_fame'):
+    if not param:
         raise NoChannelAttributed
 
-    return param.get('global'), param.get('hall_of_fame')
+    if not param[0].get('global') and not param[0].get('hall_of_fame'):
+        raise NoChannelAttributed
+
+    return param[0].get('global'), param[0].get('hall_of_fame')
 
 
 async def handle_response_image(

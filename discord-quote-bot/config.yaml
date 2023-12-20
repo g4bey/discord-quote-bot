@@ -1,8 +1,8 @@
 logger:
   name: discord_bot
-  log_level: 20
+  log_level: 40
   folder: 'logs'
 
 db_name: quote_bot_db.db
-
-owner_guild: 964818125503750174
+token: ...
+owner_guild: ...
