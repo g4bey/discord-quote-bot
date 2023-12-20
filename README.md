@@ -1,10 +1,14 @@
-# discord-quote-bot
+## Discord Quote Bot
 
-This was the bot as I left it in May 2022. There's tons of problems in it, but I decided to write this readme and create a release.
-I will try to improve it although I would really not code it the same way as of today.
+# disclaimer
 
-Back in the days I used a lot of upserts as I thought it could be useful of bot go off-line. 
-Though, I believe it would be better to figure a way to detect guilds that are not in db, then register them properly.
+As of my last update in May 2022, the bot has numerous issues that need addressing. Despite its flaws, I decided to document these problems in a readme file and create a release. While I intend to make improvements, I would prefer not to code it the same way as of today.
+
+In the past, I heavily relied on upserts, thinking they could be useful in case the bot went offline. However, I now believe it would be more effective to find a way to detect guilds that are not in the database and register them properly.
+
+This project was initiated a while ago, and at the time, I was eager to complete it. Looking back, it's amusing to see all the unconventional code I wrote.
 
 
-This was made a while ago and I guess I wanted to finish it. It's funny looking back at all the weird code.
+# how to start
+
+it's pretty easy! All you need is a token u set in config... and voila! You may as well set a owner guild in order to use the owner only commands.
