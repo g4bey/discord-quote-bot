@@ -81,12 +81,23 @@ async def display_settings(ctx: lightbulb.context):
     if not guild:
         guild = registerOrReset_guild(ctx.guild_id)
 
-    await ctx.respond('\n'.join([
-        f"Guild Id: {guild['guild_id']}",
-        f"Global mode: {'Enabled' if (guild['global']) else 'Disabled'}",
-        f"Hall of fame: {guild['hall_of_fame'] if (guild['hall_of_fame']) else 'Unset'}"
-    ])
-    )
+    response = f"Guild Id: {guild['guild_id']}"
+
+    response += "\nGlobal mode: "
+    if guild['global']:
+        response += "enable"
+    else:
+        response += "disabled"
+
+    response += "\nHall of fame: "
+    if guild['hall_of_fame']:
+        response += f"<#{guild['hall_of_fame']}>"
+        response += "\n"
+    else:
+        response += "unset"
+
+    await ctx.respond(response)
+
 
 @plugin.command
 @lightbulb.command('reset', 'Reset setting for the bot.')
@@ -95,6 +106,7 @@ async def reset(ctx: lightbulb.context) -> None:
     registerOrReset_guild(ctx.guild_id)
 
     await ctx.respond('Settings have been reseted for this guild', reply=False)
+
 
 # -----------------------------------------------------
 
