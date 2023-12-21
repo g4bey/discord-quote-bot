@@ -16,11 +16,11 @@ guilds_settings = db.table('guild_setting')
 
 
 def registerOrReset_guild(guild_id) -> Document:
-    guilds_settings.upsert(
+    db.upsert(
         {
-            'guild_id': guild_id,
             'global': True,
-            'hall_of_fame': None
+            'hall_of_fame': None,
+            'guild_id': guild_id
         },
         Query().guild_id == guild_id
     )
@@ -28,26 +28,24 @@ def registerOrReset_guild(guild_id) -> Document:
     return select_guild(guild_id)
 
 def change_global(guild_id, value) -> None:
-    guilds_settings.upsert(
+    db.update(
         {
-            'guild_id': guild_id,
             'global': value
         },
         Query().guild_id == guild_id
     )
 
 def change_hall_of_fame(guild_id, channel_id) -> None:
-    guilds_settings.upsert(
+    db.update(
         {
-            'guild_id': guild_id,
             'hall_of_fame': channel_id
         },
-        Query().guild_id == channel_id
+        Query().guild_id == guild_id
     )
 
 def remove_guild(guild_id) -> None:
-    guilds_settings.remove(Query().guild_id == guild_id)
+    db.remove(Query().guild_id == guild_id)
 
 
 def select_guild(guild_id) -> Document | None:
-    return guilds_settings.get(Query().guild_id == guild_id)
+    return db.get(Query().guild_id == guild_id)
