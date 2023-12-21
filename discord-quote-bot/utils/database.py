@@ -12,11 +12,10 @@ db_name = get_config().get('db_name') or 'database.db'
 db = TinyDB(db_name)
 db.table_class = SmartCacheTable
 
-guilds_settings = db.table('guild_setting')
-
+guild_settings = db.table('guild_settings')
 
 def registerOrReset_guild(guild_id) -> Document:
-    db.upsert(
+    guild_settings.upsert(
         {
             'global': True,
             'hall_of_fame': None,
@@ -28,7 +27,7 @@ def registerOrReset_guild(guild_id) -> Document:
     return select_guild(guild_id)
 
 def change_global(guild_id, value) -> None:
-    db.update(
+    guild_settings.update(
         {
             'global': value
         },
@@ -36,7 +35,7 @@ def change_global(guild_id, value) -> None:
     )
 
 def change_hall_of_fame(guild_id, channel_id) -> None:
-    db.update(
+    guild_settings.update(
         {
             'hall_of_fame': channel_id
         },
@@ -44,8 +43,7 @@ def change_hall_of_fame(guild_id, channel_id) -> None:
     )
 
 def remove_guild(guild_id) -> None:
-    db.remove(Query().guild_id == guild_id)
-
+    guild_settings.remove(Query().guild_id == guild_id)
 
 def select_guild(guild_id) -> Document | None:
-    return db.get(Query().guild_id == guild_id)
+    return guild_settings.get(Query().guild_id == guild_id)

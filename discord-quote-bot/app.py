@@ -1,14 +1,11 @@
 import aiohttp
 import concurrent.futures
 from utils import *
-import logging
-from os import listdir, getenv, name as os_name
+from os import name as os_name
 import hikari
 import asyncio
 import lightbulb
 from utils import get_config, registerOrReset_guild, remove_guild
-from utils import guilds_settings
-from tinydb import Query
 from multiprocessing import freeze_support
 
 

@@ -1,7 +1,7 @@
 from multiprocessing import context
 import hikari
 import lightbulb
-from utils import guilds_settings, registerOrReset_guild, select_guild, change_global, get_config, change_hall_of_fame
+from utils import registerOrReset_guild, select_guild, change_global, get_config, change_hall_of_fame
 
 plugin = lightbulb.Plugin("Admin-Commands")
 plugin.add_checks(
