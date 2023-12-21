@@ -129,3 +129,5 @@ dmypy.json
 .pyre/
 discord-quote-bot/quote_bot_db.db
 discord-quote-bot/config.yaml
+discord-quote-bot/.idea/vcs.xml
+discord-quote-bot/config.yaml
