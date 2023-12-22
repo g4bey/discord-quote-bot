@@ -1,6 +1,6 @@
-## Discord Quote Bot
+# Discord Quote Bot
 
-# disclaimer
+## disclaimer
 
 As of my last update in May 2022, the bot has numerous issues that need addressing. Despite its flaws, I decided to document these problems in a readme file and create a release. While I intend to make improvements, I would prefer not to code it the same way as of today.
 
@@ -12,4 +12,4 @@ This project was initiated a while ago, and at the time, I was eager to complete
 ## how to start
 
 it's pretty easy! All you need is a token u set in `config.yaml`... and voila! 
-You may as well set a owner guild in order to use the owner only commands.
+You may as well set an owner guild to use the owner-only commands.
