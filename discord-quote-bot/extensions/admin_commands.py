@@ -2,6 +2,7 @@ from multiprocessing import context
 import hikari
 import lightbulb
 from utils import *
+from dateutil.parser import parse
 
 plugin = lightbulb.Plugin("Admin-Commands")
 plugin.add_checks(
@@ -58,7 +59,6 @@ async def toggle_scmd(ctx: lightbulb.Context):
     enable_channel(ctx.guild_id, ctx.channel_id)
 
     await ctx.respond('This channel has been added to the list.')
-
 
 @hall_of_fame_grp.child
 @lightbulb.command('remove', 'Remove the channel from the list.')

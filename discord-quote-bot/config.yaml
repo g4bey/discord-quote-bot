@@ -3,6 +3,6 @@ logger:
   log_level: 40
   folder: 'logs'
 
-db_name: quote_bot_db.db
-token: ...
-owner_guild: ...
+db_name: quote_bot_db_testz.db
+token: MTE4Nzc1NDMwODY4NzY0MjY3NQ.GHrkij.o6y_Ylx-kkodPmJYwF-IpK8s9Npdp8dA4-ZVQo
+owner_guild: 1181032073889325166

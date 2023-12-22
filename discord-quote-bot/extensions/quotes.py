@@ -9,7 +9,7 @@ from .errors_handling import CharacterLimitException
 from .errors_handling import NoChannelAttributed
 from .errors_handling import MissingParameterException
 import typing
-
+import dateutil.parser
 
 plugin = lightbulb.Plugin("Quote-Maker")
 plugin.add_checks(lightbulb.guild_only)
@@ -176,6 +176,11 @@ async def embed_this_cmd(
 @plugin.command
 @lightbulb.add_cooldown(15.0, 1, lightbulb.UserBucket)
 @lightbulb.option(
+    'custom_date',
+    'Try using common formats!',
+    required=False
+)
+@lightbulb.option(
     'type',
     'The bot can either generate an image, or send an embed.',
     choices=['image', 'embed']
@@ -202,17 +207,33 @@ async def quote_user_cmd(
     ctx: lightbulb.Context,
     quote: str,
     author: str,
-    type: str
+    type: str,
+    custom_date: str | None = None
 ) -> None:
 
     username = f"{author.username}"
     avatar = author.avatar_url
+    formarted_date = None
 
-    await handle_response(ctx, username, quote, type, avatar)
+    if custom_date:
+        try:
+            formarted_date = dateutil.parser.parse(custom_date)
+        except:
+            await ctx.respond("Could not convert date.", delete_after=10)
+            return
+    else:
+        formarted_date = datetime.datetime.now(tz=datetime.timezone.utc)
+    
+    await handle_response(ctx, username, quote, type, avatar, formarted_date)
 
 
 @plugin.command
 @lightbulb.add_cooldown(15.0, 1, lightbulb.UserBucket)
+@lightbulb.option(
+    'custom_date',
+    'Try using common formats!',
+    required=False
+)
 @lightbulb.option(
     'type',
     'The bot can either generate an image, or send an embed.',
@@ -233,19 +254,34 @@ async def quote_user_cmd(
 async def quote_me_cmd(
     ctx: lightbulb.Context,
     quote: str,
-    type: str
+    type: str,
+    custom_date: str | None = None
 ) -> None:
 
     author = ctx.author
     username = f"{author.username}"
     avatar = ctx.author.avatar_url
 
-    await handle_response(ctx, username, quote, type, avatar)
+    if custom_date:
+        try:
+            formarted_date = dateutil.parser.parse(custom_date)
+        except:
+            await ctx.respond("Could not convert date.", delete_after=10)
+            return
+    else:
+        formarted_date = datetime.datetime.now(tz=datetime.timezone.utc)
+    
+    await handle_response(ctx, username, quote, type, avatar, formarted_date)
 
 
 
 @plugin.command
 @lightbulb.add_cooldown(15.0, 1, lightbulb.UserBucket)
+@lightbulb.option(
+    'custom_date',
+    'Try using common formats!',
+    required=False
+)
 @lightbulb.option(
     'type',
     'The bot can either generate an image, or send an embed.',
@@ -273,9 +309,19 @@ async def quote_anon_cmd(
     type: str,
     quote: str, author:
         typing.Optional[str] = None,
+    custom_date: str | None = None
 ) -> None:
 
-    await handle_response(ctx, author, quote, type, ctx.bot.application.icon_url)
+    if custom_date:
+        try:
+            formarted_date = dateutil.parser.parse(custom_date)
+        except:
+            await ctx.respond("Could not convert date.", delete_after=10)
+            return
+    else:
+        formarted_date = datetime.datetime.now(tz=datetime.timezone.utc)
+    
+    await handle_response(ctx, author, quote, type, ctx.bot.application.icon_url, formarted_date)
 
 
 # -----------------------------------------------------
