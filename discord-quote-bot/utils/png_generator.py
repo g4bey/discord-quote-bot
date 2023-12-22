@@ -79,15 +79,15 @@ def build_image(username, quote, profile_picture, date_txt):
     )
 
     credits_txt = f'{username}\n{date_txt}'
-    longest = username if len(username) >= 10 else date_txt
+    longest = username if len(username) >= len(date_txt) else date_txt
     offset = textLayer.textlength(
         longest,
         font=credits_fnt
     )
     textLayer.text(
         (
-            base.width - (offset + 15),
-            base.height - 75
+            base.width - (offset + 17),
+            base.height - 80
         ),
         credits_txt,
         font=credits_fnt,
