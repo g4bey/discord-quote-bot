@@ -143,13 +143,13 @@ async def handle_response(
 async def quote_this_cmd(
     ctx: lightbulb.MessageContext
 ) -> None:
-
     target = ctx.options.target
     avatar = target.author.avatar_url
     username = f"{target.author.username}"
     quote = target.content
+    date = target.created_at
 
-    await handle_response(ctx, username, quote,'image', avatar)
+    await handle_response(ctx, username, quote,'image', avatar, date)
 
 
 @plugin.command
@@ -168,8 +168,9 @@ async def embed_this_cmd(
     avatar = target.author.avatar_url
     username = f"{target.author.username}"
     quote = target.content
+    date = target.created_at
 
-    await handle_response(ctx, username, quote, 'embed', avatar)
+    await handle_response(ctx, username, quote, 'embed', avatar, date)
 
 
 @plugin.command
