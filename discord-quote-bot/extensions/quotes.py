@@ -59,20 +59,21 @@ async def handle_response(
 ) -> None:
 
     veriy_field(quote, username)
-
-    global_response, hall_of_fame = get_parameters_and_check_availibity(ctx)
     
     guild = select_guild(ctx.guild_id)
+    current_channel = ctx.get_channel().id
 
     if not guild:
         raise NoChannelAttributed
 
-    if not guild.get('global') and not guild.get('hall_of_fame'):
-        raise NoChannelAttributed
-
-    global_mode = guild.get('global')
+    global_scope = guild.get('global')
     hall_of_fame = guild.get('hall_of_fame')
-    current_channel = ctx.channel_id
+    scope = guild.get('scope')
+    channels = guild.get('channels')
+
+    # nowhere to post.
+    if not channels and scope != 'global' and not hall_of_fame:
+        raise NoChannelAttributed
 
     if not pfp:
         # pfp = ctx.bot.application.icon_url  
@@ -108,7 +109,6 @@ async def handle_response(
         )
         attachment['embed'] = embed
 
-    
     if hall_of_fame:
         await ctx.bot.rest.create_message(
             hall_of_fame,
@@ -117,19 +117,17 @@ async def handle_response(
         )
 
         if hall_of_fame != current_channel:
-            if global_response:
+            if scope == 'global' or scope == 'selective' and current_channel in channels: 
                 await ctx.respond('Here is your quote!', **attachment)
+            # else it has to be selective.
 
             # sending it to the hall of fame.
             channel = ctx.get_guild().get_channel(hall_of_fame).mention
             await ctx.respond(f'You quote was sent straight to {channel}', reply=False)
         else:
             await ctx.respond("Here we go!", delete_after=0)
-    elif global_response:
+    elif scope == 'global' or scope == 'selective' and current_channel in channels:
         await ctx.respond('Here is your quote!', **attachment)
-    else:
-        await ctx.respond('Nowhere to send the quote :c! Global mode disabled, and no hall of fame.')
-
 
 
 # -----------------------------------------------------

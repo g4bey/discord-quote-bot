@@ -1,7 +1,7 @@
 from multiprocessing import context
 import hikari
 import lightbulb
-from utils import registerOrReset_guild, select_guild, change_global, get_config, change_hall_of_fame
+from utils import *
 
 plugin = lightbulb.Plugin("Admin-Commands")
 plugin.add_checks(
@@ -42,32 +42,65 @@ async def toggle_scmd(ctx: lightbulb.Context):
 
 
 # -----------------------------------------------------
-
+    
 
 @plugin.command
-@lightbulb.command('global_mode', 'Enables and disables the global mode.')
+@lightbulb.command('channel',
+                   'Allow to generate the quote in this channel')
 @lightbulb.implements(lightbulb.SlashCommandGroup)
-async def global_mode_grp(ctx: lightbulb.context):
+async def hall_of_fame_grp(ctx: lightbulb.Context):
     pass
 
-
-@global_mode_grp.child
-@lightbulb.command('enable',
-                   'The bot will reply in the channel it was invocated in.')
+@hall_of_fame_grp.child
+@lightbulb.command('add', 'Adds the channel to the list.')
 @lightbulb.implements(lightbulb.SlashSubCommand)
-async def enable_scmd(ctx: lightbulb.Context):
-    change_global(ctx.guild_id, True)
+async def toggle_scmd(ctx: lightbulb.Context):
+    enable_channel(ctx.guild_id, ctx.channel_id)
 
-    await ctx.respond('Global mode has been activated.')
+    await ctx.respond('This channel has been added to the list.')
 
 
-@global_mode_grp.child
-@lightbulb.command('disable',
-                   'The bot will only reply in the hall of fame, if set.')
+@hall_of_fame_grp.child
+@lightbulb.command('remove', 'Remove the channel from the list.')
 @lightbulb.implements(lightbulb.SlashSubCommand)
-async def disable_scmd(ctx: lightbulb.Context):
-    change_global(ctx.guild_id, False)
-    await ctx.respond('Global mode has been disabled.')
+async def toggle_scmd(ctx: lightbulb.Context):
+    disable_channel(ctx.guild_id, ctx.channel_id)
+
+    await ctx.respond('This channel has been removed from the list.')
+
+
+# -----------------------------------------------------
+
+@plugin.command
+@lightbulb.command('scope', 'Pick the scope for the bot operate in.')
+@lightbulb.implements(lightbulb.SlashCommandGroup)
+async def scope_grp(ctx: lightbulb.context):
+    pass
+
+@scope_grp.child
+@lightbulb.command('global',
+                   'The bot will post from anywhere.')
+@lightbulb.implements(lightbulb.SlashSubCommand)
+async def global_scope(ctx: lightbulb.Context):
+    change_scope(ctx.guild_id, 'global')
+    await ctx.respond('Global scope has been activated.')
+
+@scope_grp.child
+@lightbulb.command('selective',
+                   'The bot will only post where it\'s been manually allowed.')
+@lightbulb.implements(lightbulb.SlashSubCommand)
+async def selective_scope(ctx: lightbulb.Context):
+    change_scope(ctx.guild_id, 'selective')
+    await ctx.respond('Selective scope has been activated.')
+
+@scope_grp.child
+@lightbulb.command('laser',
+                   'Only the hall of fame will see images from the bot.')
+@lightbulb.implements(lightbulb.SlashSubCommand)
+async def laser_scope(ctx: lightbulb.Context):
+    change_scope(ctx.guild_id, 'ultraSelective')
+    await ctx.respond('Laser scope has been activated.')
+
 
 
 # -----------------------------------------------------
@@ -83,11 +116,11 @@ async def display_settings(ctx: lightbulb.context):
 
     response = f"Guild Id: {guild['guild_id']}"
 
-    response += "\nGlobal mode: "
-    if guild['global']:
-        response += "enable"
-    else:
-        response += "disabled"
+    scope = guild['scope']
+    response += f"\nScope: {scope}"
+    if scope == 'selective':
+        channels = guild['channels']
+        response += f", channels = {channels}"
 
     response += "\nHall of fame: "
     if guild['hall_of_fame']:
