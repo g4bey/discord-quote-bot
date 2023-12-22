@@ -90,7 +90,11 @@ async def handle_response(
                 avatar.write(chunk)
 
         loop = ctx.bot.d.loop
-        date_txt = date.strftime("%Y-%m-%d - %H:%M:%S")
+
+        if date.hour == 0:
+            date_txt = date.strftime("%Y-%m-%d")
+        else:
+            date_txt = date.strftime("%Y-%m-%d - %H:%M:%S")
         image = await loop.run_in_executor(ctx.bot.d.process_pool, build_image, username, quote, avatar, date_txt)
         attachment['attachment'] = image
     else:
