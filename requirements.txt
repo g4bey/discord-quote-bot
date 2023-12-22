@@ -15,3 +15,4 @@ PyYAML==6.0.1
 tinydb==4.8.0
 tinydb-smartcache==2.0.0
 yarl==1.9.4
+uvloop>=0.19; sys_platform != "win32"
