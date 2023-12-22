@@ -95,7 +95,7 @@ async def handle_response(
         attachment['attachment'] = image
     else:
         embed = hikari.Embed(
-        title=f'{username} once said...',
+        title=f'{username}:',
         description=quote,
         color=hikari.Color.from_hex_code(f"#{token_hex(3)}")
         )
