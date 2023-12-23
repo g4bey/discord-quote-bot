@@ -118,15 +118,23 @@ async def process_response(
 
 @plugin.command
 @lightbulb.add_cooldown(15.0, 1, lightbulb.UserBucket)
+@lightbulb.option(
+    'custom_txt',
+    'Whatever you want to write!',
+    required=False,
+    default = str()
+)
 @lightbulb.command(
     "quote_this",
     "Click to quote this message.",
-    auto_defer=True
+    auto_defer=True,
+    pass_options = True
 )
 @lightbulb.implements(lightbulb.MessageCommand)
 async def quote_this_cmd(
-    ctx: lightbulb.MessageContext
+    ctx: lightbulb.MessageContext, custom_txt: str = str()
 ) -> None:
+
     target = ctx.options.target
     avatar = target.author.avatar_url
     username = f"{target.author.username}"
@@ -135,11 +143,17 @@ async def quote_this_cmd(
 
     veriy_field(quote, username)
 
-    await handle_image(ctx, username, quote, avatar, date)
+    await handle_image(ctx, username, quote, avatar, date, custom_txt)
 
 
 @plugin.command
 @lightbulb.add_cooldown(15.0, 1, lightbulb.UserBucket)
+@lightbulb.option(
+    'custom_txt',
+    'Whatever you want to write!',
+    required=False,
+    default = str()
+)
 @lightbulb.command(
     "embed_this",
     "Click to embed this message.",
@@ -147,7 +161,7 @@ async def quote_this_cmd(
 )
 @lightbulb.implements(lightbulb.MessageCommand)
 async def embed_this_cmd(
-    ctx: lightbulb.MessageContext
+    ctx: lightbulb.MessageContext, custom_txt: str = str()
 ) -> None:
 
     target = ctx.options.target
@@ -158,7 +172,7 @@ async def embed_this_cmd(
 
     veriy_field(quote, username)
     
-    await handle_embed(ctx, username, quote, avatar, date)
+    await handle_embed(ctx, username, quote, avatar, date, custom_txt)
 
 
 """
