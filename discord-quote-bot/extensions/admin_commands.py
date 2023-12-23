@@ -17,91 +17,77 @@ conf = get_config()
 
 
 @plugin.command
+@lightbulb.option(
+    'option',
+    'Set: This channel becomes the hall of fame.',
+    choices=['set', 'unset'],
+    required=True
+)
 @lightbulb.command('hall_of_fame',
-                   'If set, quotes will be sent in the hall of fame.')
-@lightbulb.implements(lightbulb.SlashCommandGroup)
-async def hall_of_fame_grp(ctx: lightbulb.Context):
-    pass
-
-
-@hall_of_fame_grp.child
-@lightbulb.command('set', 'Sets a channel as the hall of fame')
-@lightbulb.implements(lightbulb.SlashSubCommand)
-async def toggle_scmd(ctx: lightbulb.Context):
-    change_hall_of_fame(ctx.guild_id, ctx.channel_id)
-
-    await ctx.respond('This channel has been set as the hall of fame.')
-
-
-@hall_of_fame_grp.child
-@lightbulb.command('unset', 'Unsets the hall of fame.')
-@lightbulb.implements(lightbulb.SlashSubCommand)
-async def toggle_scmd(ctx: lightbulb.Context):
-    change_hall_of_fame(ctx.guild_id, None)
-
-    await ctx.respond('The hall of fame has been unset.')
+                   'If set, quotes will be forward to this channel.', 
+                   pass_options=True
+                   )
+@lightbulb.implements(lightbulb.SlashCommand)
+async def hall_of_fame_toggle(ctx: lightbulb.SlashContext, option: str):
+    if option == 'set':
+        change_hall_of_fame(ctx.guild_id, ctx.channel_id)
+        await ctx.respond('This channel has been set as the hall of fame')
+    else:
+        guild = select_guild(ctx.guild_id)
+        if guild['hall_of_fame'] == ctx.get_channel().id:
+            change_hall_of_fame(ctx.guild_id, None)
+            await ctx.respond('This channel has been unset as the hall of fame.')
+        else:
+            await ctx.respond('This channel is not the hall of fame. Please check /settings')
 
 
 # -----------------------------------------------------
     
 
 @plugin.command
+@lightbulb.option(
+    'option',
+    'Add or remove the channel from allowance list.',
+    choices=['add', 'remove'],
+    required=True
+)
 @lightbulb.command('channel',
-                   'Allow to generate the quote in this channel')
-@lightbulb.implements(lightbulb.SlashCommandGroup)
-async def hall_of_fame_grp(ctx: lightbulb.Context):
-    pass
-
-@hall_of_fame_grp.child
-@lightbulb.command('add', 'Adds the channel to the list.')
-@lightbulb.implements(lightbulb.SlashSubCommand)
-async def toggle_scmd(ctx: lightbulb.Context):
-    enable_channel(ctx.guild_id, ctx.channel_id)
-
-    await ctx.respond('This channel has been added to the list.')
-
-@hall_of_fame_grp.child
-@lightbulb.command('remove', 'Remove the channel from the list.')
-@lightbulb.implements(lightbulb.SlashSubCommand)
-async def toggle_scmd(ctx: lightbulb.Context):
-    disable_channel(ctx.guild_id, ctx.channel_id)
-
-    await ctx.respond('This channel has been removed from the list.')
-
+                   'Allow the bot to send quotes in this channel. Only works with global & selective scope.', 
+                   pass_options=True
+                   )
+@lightbulb.implements(lightbulb.SlashCommand)
+async def channel_toggle(ctx: lightbulb.SlashContext, option: str):
+    if option == 'add':
+        enable_channel(ctx.guild_id, ctx.channel_id)
+        await ctx.respond('This channel has been added to the list.')
+    else:
+        disable_channel(ctx.guild_id, ctx.channel_id)
+        await ctx.respond('This channel has been removed from the list.')
 
 # -----------------------------------------------------
 
 @plugin.command
-@lightbulb.command('scope', 'Pick the scope for the bot operate in.')
-@lightbulb.implements(lightbulb.SlashCommandGroup)
-async def scope_grp(ctx: lightbulb.context):
-    pass
-
-@scope_grp.child
-@lightbulb.command('global',
-                   'The bot will post from anywhere.')
-@lightbulb.implements(lightbulb.SlashSubCommand)
-async def global_scope(ctx: lightbulb.Context):
-    change_scope(ctx.guild_id, 'global')
-    await ctx.respond('Global scope has been activated.')
-
-@scope_grp.child
-@lightbulb.command('selective',
-                   'The bot will only post where it\'s been manually allowed.')
-@lightbulb.implements(lightbulb.SlashSubCommand)
-async def selective_scope(ctx: lightbulb.Context):
-    change_scope(ctx.guild_id, 'selective')
-    await ctx.respond('Selective scope has been activated.')
-
-@scope_grp.child
-@lightbulb.command('laser',
-                   'Only the hall of fame will see images from the bot.')
-@lightbulb.implements(lightbulb.SlashSubCommand)
-async def laser_scope(ctx: lightbulb.Context):
-    change_scope(ctx.guild_id, 'ultraSelective')
-    await ctx.respond('Laser scope has been activated.')
-
-
+@lightbulb.option(
+    'option',
+    'Global: everywhere. Selective: only enabled channel. Laser: hall of fame only.',
+    choices=['global', 'selective', 'laser'],
+    required=True
+)
+@lightbulb.command('scope', 
+                   'Pick the scope for the bot to send quotes in.', 
+                   pass_options=True
+                   )
+@lightbulb.implements(lightbulb.SlashCommand)
+async def scope(ctx: lightbulb.SlashContext, option: str):
+    if option == 'global':
+        change_scope(ctx.guild_id, 'global')
+        await ctx.respond('Global scope has been activated.')
+    elif option == 'selective':
+        change_scope(ctx.guild_id, 'selective')
+        await ctx.respond('Selective scope has been activated.')
+    else:
+        change_scope(ctx.guild_id, 'ultraSelective')
+        await ctx.respond('Laser scope has been activated.')
 
 # -----------------------------------------------------
 
