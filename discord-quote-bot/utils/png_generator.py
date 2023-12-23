@@ -28,7 +28,7 @@ PADDING = 20
 # -----------------------------------------------------
 
 
-def build_image(username, quote, profile_picture, date_txt):
+def build_image(username, quote, profile_picture, free_txt = ''):
     """Build the quote and return it as a hikari.Bytes object"""
 
     # Creating the base for the quote
@@ -78,12 +78,19 @@ def build_image(username, quote, profile_picture, date_txt):
         "assets/fonts/roboto_mono_bold_variable.ttf", 25
     )
 
-    credits_txt = f'{username}\n{date_txt}'
-    longest = username if len(username) >= len(date_txt) else date_txt
+    username = f'-{username}'
+    credits_txt = f'{username}'
+
+    if free_txt:
+        credits_txt += f"\n{free_txt}"
+
+    longest = username if len(username) >= len(free_txt) else free_txt
+    
     offset = textLayer.textlength(
-        longest,
+        username,
         font=credits_fnt
     )
+
     textLayer.text(
         (
             base.width - (offset + 17),
