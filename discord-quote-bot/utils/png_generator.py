@@ -1,3 +1,4 @@
+import re
 from time import strftime
 from utils import get_config
 from utils import create_if_missing
@@ -42,6 +43,8 @@ def build_image(username, quote, profile_picture, free_txt = ''):
 
     # Adding the quote text.
     unformated_quote = "« " + ' '.join(quote.split('\n')) + " »"
+    unformated_quote = re.sub("\s\s+" , " ", unformated_quote)
+    
     lengh_unformated_quote = len(unformated_quote)
     if lengh_unformated_quote < 111:
         quote_chara_width = 50
@@ -49,15 +52,20 @@ def build_image(username, quote, profile_picture, free_txt = ''):
         quote_chara_width = 40
     elif lengh_unformated_quote < 333:
         quote_chara_width = 30
-    else:
+    elif lengh_unformated_quote < 500:
         quote_chara_width = 25
+    elif lengh_unformated_quote < 750:
+        quote_chara_width = 20
+    else:
+        quote_chara_width = 20
+    
     quote_fnt = ImageFont.truetype(
         "assets/fonts/roboto_flex_variable.ttf", quote_chara_width
     )
-    text_box_width = base.width - (pfp.width + PADDING + BORDER_WIDTH[2] + 5)
-    quote_lengh = textLayer.textlength(unformated_quote, font=quote_fnt)
-    avarage_chara_width = quote_lengh / len(unformated_quote)
-    max_chara_per_line = floor(text_box_width / avarage_chara_width)
+    text_box_width = base.width - (pfp.width + PADDING + BORDER_WIDTH[2])
+    quote_lenght = textLayer.textlength(unformated_quote, font=quote_fnt)
+    avarage_chara_width = quote_lenght / len(unformated_quote)
+    max_chara_per_line = floor(text_box_width / avarage_chara_width) - 10
     wrapped_text = fill(
         unformated_quote,
         width=max_chara_per_line,
@@ -78,23 +86,26 @@ def build_image(username, quote, profile_picture, free_txt = ''):
         "assets/fonts/roboto_mono_bold_variable.ttf", 25
     )
 
-    username = f'-{username}'
-    credits_txt = f'{username}'
+    username = f'- {username}'
 
     if free_txt:
-        credits_txt += f"\n{free_txt}"
+        credits_txt = f"{username}\n{free_txt}"
+        line = 2
+        longest = username if len(username)>= len(free_txt) else free_txt
+    else:
+        credits_txt = f"{username}"
+        line = 1
+        longest = username
 
-    longest = username if len(username) >= len(free_txt) else free_txt
-    
-    offset = textLayer.textlength(
-        username,
+    offset_x = textLayer.textlength(
+        longest,
         font=credits_fnt
     )
 
     textLayer.text(
         (
-            base.width - (offset + 17),
-            base.height - 80
+            base.width - (offset_x + 15), # x
+            base.height - (line*25 +30)
         ),
         credits_txt,
         font=credits_fnt,
