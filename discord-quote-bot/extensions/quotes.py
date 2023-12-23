@@ -22,8 +22,8 @@ def veriy_field(quote: str, username: str) -> None:
     if not quote:
         raise MissingParameterException('quote')
 
-    if len(quote) > 420:
-        raise CharacterLimitException(420, 'quote')
+    if len(quote) > 1000:
+        raise CharacterLimitException(1000, 'quote')
 
     if len(username) > 38:
         raise CharacterLimitException(38, 'username')
@@ -171,17 +171,17 @@ async def embed_this_cmd(
 
 @plugin.command
 @lightbulb.command(
-    'quote', 
+    'embeded', 
     'Remember these few words forever!', 
     inherit_checks=True,
     pass_options=True,
     auto_defer=True
 )
 @lightbulb.implements(lightbulb.SlashCommandGroup)
-async def quote_grp(ctx: lightbulb.SlashContext):
+async def embeded(ctx: lightbulb.SlashContext):
     pass
 
-@quote_grp.child
+@embeded.child
 @lightbulb.add_cooldown(15.0, 1, lightbulb.UserBucket)
 @lightbulb.option(
     'custom_txt',
@@ -202,7 +202,7 @@ async def quote_grp(ctx: lightbulb.SlashContext):
     required=True
 )
 @lightbulb.command(
-    'embed', 'Make it an embed.',
+    'quote', 'Make it an embed.',
     inherit_checks=True,
     pass_options=True,
     auto_defer=True
@@ -218,7 +218,53 @@ async def quote_embed(
     avatar = user.avatar_url
     await handle_embed(ctx, user, content, avatar, custom_txt)
 
-@quote_grp.child
+@embeded.child
+@lightbulb.add_cooldown(15.0, 1, lightbulb.UserBucket)
+@lightbulb.option(
+    'custom_txt',
+    'Whatever you want to write!',
+    required=False,
+    default = str()
+)
+@lightbulb.option(
+    'content',
+    'The text you would like to quote',
+    required=True
+)
+@lightbulb.command(
+    'quote_me', 'Make it an image.',
+    inherit_checks=True,
+    pass_options=True,
+    auto_defer=True
+)
+@lightbulb.implements(lightbulb.SlashSubCommand)
+async def quote_me_embed(    
+    ctx: lightbulb.SlashContext,  
+    content: str, 
+    custom_txt: str = str()
+    ):
+
+    username = f"{ctx.username}"
+    avatar = ctx.user.avatar_url
+
+    veriy_field(content, username)
+    await handle_image(ctx, username, content, avatar, custom_txt)
+
+
+
+@plugin.command
+@lightbulb.command(
+    'picture', 
+    'Remember these few words forever!', 
+    inherit_checks=True,
+    pass_options=True,
+    auto_defer=True
+)
+@lightbulb.implements(lightbulb.SlashCommandGroup)
+async def pictured(ctx: lightbulb.SlashContext):
+    pass
+
+@pictured.child
 @lightbulb.add_cooldown(15.0, 1, lightbulb.UserBucket)
 @lightbulb.option(
     'custom_txt',
@@ -239,7 +285,7 @@ async def quote_embed(
     required=True
 )
 @lightbulb.command(
-    'image', 'Make it an image.',
+    'quote', 'Make it an image.',
     inherit_checks=True,
     pass_options=True,
     auto_defer=True
@@ -254,6 +300,38 @@ async def quote_image(
 
     username = f"{user.username}"
     avatar = user.avatar_url
+
+    veriy_field(content, username)
+    await handle_image(ctx, username, content, avatar, custom_txt)
+
+@pictured.child
+@lightbulb.add_cooldown(15.0, 1, lightbulb.UserBucket)
+@lightbulb.option(
+    'custom_txt',
+    'Whatever you want to write!',
+    required=False,
+    default = str()
+)
+@lightbulb.option(
+    'content',
+    'The text you would like to quote',
+    required=True
+)
+@lightbulb.command(
+    'quote_me', 'Make it an image.',
+    inherit_checks=True,
+    pass_options=True,
+    auto_defer=True
+)
+@lightbulb.implements(lightbulb.SlashSubCommand)
+async def quote_me_image(    
+    ctx: lightbulb.SlashContext,  
+    content: str, 
+    custom_txt: str = str()
+    ):
+
+    username = f"{ctx.username}"
+    avatar = ctx.user.avatar_url
 
     veriy_field(content, username)
     await handle_image(ctx, username, content, avatar, custom_txt)
