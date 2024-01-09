@@ -119,13 +119,12 @@ async def process_response(
 @plugin.command
 @lightbulb.add_cooldown(15.0, 1, lightbulb.UserBucket)
 @lightbulb.command(
-    "quote_this",
+    "make_picture",
     "Click to quote this message.",
-    auto_defer=True,
-    pass_options = True
+    auto_defer=True
 )
 @lightbulb.implements(lightbulb.MessageCommand)
-async def quote_this_cmd(
+async def quote_that_cmd(
     ctx: lightbulb.MessageContext
 ) -> None:
 
@@ -136,13 +135,13 @@ async def quote_this_cmd(
 
     veriy_field(quote, username)
 
-    await handle_image(ctx, username, quote, avatar, date, date.strftime("%d/%m/%Y, %H:%M:%S"))
+    await handle_image(ctx, username, quote, avatar, date.strftime("%d/%m/%Y, %H:%M:%S"))
 
 
 @plugin.command
 @lightbulb.add_cooldown(15.0, 1, lightbulb.UserBucket)
 @lightbulb.command(
-    "embed_this",
+    "make_embed",
     "Click to embed this message.",
     auto_defer=True
 )
