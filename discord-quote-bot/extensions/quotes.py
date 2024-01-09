@@ -118,12 +118,6 @@ async def process_response(
 
 @plugin.command
 @lightbulb.add_cooldown(15.0, 1, lightbulb.UserBucket)
-@lightbulb.option(
-    'custom_txt',
-    'Whatever you want to write!',
-    required=False,
-    default = str()
-)
 @lightbulb.command(
     "quote_this",
     "Click to quote this message.",
@@ -132,28 +126,21 @@ async def process_response(
 )
 @lightbulb.implements(lightbulb.MessageCommand)
 async def quote_this_cmd(
-    ctx: lightbulb.MessageContext, custom_txt: str = str()
+    ctx: lightbulb.MessageContext
 ) -> None:
 
-    target = ctx.options.target
-    avatar = target.author.avatar_url
-    username = f"{target.author.username}"
-    quote = target.content
-    date = target.created_at
+    avatar = ctx.author.avatar_url
+    username = f"{ctx.author.username}"
+    quote = ctx.options.target.content
+    date = ctx.event.interaction.created_at
 
     veriy_field(quote, username)
 
-    await handle_image(ctx, username, quote, avatar, date, custom_txt)
+    await handle_image(ctx, username, quote, avatar, date, date.strftime("%d/%m/%Y, %H:%M:%S"))
 
 
 @plugin.command
 @lightbulb.add_cooldown(15.0, 1, lightbulb.UserBucket)
-@lightbulb.option(
-    'custom_txt',
-    'Whatever you want to write!',
-    required=False,
-    default = str()
-)
 @lightbulb.command(
     "embed_this",
     "Click to embed this message.",
@@ -161,18 +148,18 @@ async def quote_this_cmd(
 )
 @lightbulb.implements(lightbulb.MessageCommand)
 async def embed_this_cmd(
-    ctx: lightbulb.MessageContext, custom_txt: str = str()
+    ctx: lightbulb.MessageContext
 ) -> None:
 
-    target = ctx.options.target
-    avatar = target.author.avatar_url
-    username = f"{target.author.username}"
-    quote = target.content
-    date = target.created_at
+    avatar = ctx.author.avatar_url
+    username = f"{ctx.author.username}"
+    quote = ctx.options.target.content
+    date = ctx.event.interaction.created_at
 
     veriy_field(quote, username)
+    print(ctx, username, quote, avatar, date, None)
     
-    await handle_embed(ctx, username, quote, avatar, date, custom_txt)
+    await handle_embed(ctx, username, quote, avatar, date.strftime("%d/%m/%Y, %H:%M:%S"))
 
 
 """
