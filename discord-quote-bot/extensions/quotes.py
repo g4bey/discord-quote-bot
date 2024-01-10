@@ -128,8 +128,8 @@ async def quote_that_cmd(
     ctx: lightbulb.MessageContext
 ) -> None:
 
-    avatar = ctx.author.avatar_url
-    username = f"{ctx.author.username}"
+    avatar = ctx.options.target.author.avatar_url
+    username = f"{ctx.options.target.author.username}"
     quote = ctx.options.target.content
     date = ctx.event.interaction.created_at
 
@@ -149,9 +149,9 @@ async def quote_that_cmd(
 async def embed_this_cmd(
     ctx: lightbulb.MessageContext
 ) -> None:
-
-    avatar = ctx.author.avatar_url
-    username = f"{ctx.author.username}"
+    
+    avatar = ctx.options.target.author.avatar_url
+    username = f"{ctx.options.target.author.username}"
     quote = ctx.options.target.content
     date = ctx.event.interaction.created_at
 
