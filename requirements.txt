@@ -10,7 +10,7 @@ hikari-lightbulb==2.3.5
 idna==3.6
 multidict==6.0.4
 openpyxl==3.1.2
-Pillow==10.1.0
+Pillow==10.2.0
 PyYAML==6.0.1
 tinydb==4.8.0
 tinydb-smartcache==2.0.0
